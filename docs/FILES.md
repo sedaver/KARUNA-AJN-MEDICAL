@@ -2,6 +2,29 @@
 
 Paths are relative to the project root. Generated dependencies and build output are excluded.
 
+Phase 3 local additions:
+
+- `docs/DEPLOYMENT_STATUS.md`
+- `supabase/migrations/20261102143558_foreign_key_indexes.sql`
+
+- `docs/PHASE_3.md`
+- `src/app/dashboard/camps/page.tsx`
+- `src/app/dashboard/camps/new/page.tsx`
+- `src/app/dashboard/camps/[id]/page.tsx`
+- `src/app/dashboard/patients/page.tsx`
+- `src/app/dashboard/patients/new/page.tsx`
+- `src/app/dashboard/patients/[id]/page.tsx`
+- `src/features/operations/schemas.ts`
+- `src/features/operations/actions.ts`
+- `src/features/operations/forms.tsx`
+- `src/features/operations/navigation.tsx`
+- `src/features/operations/patient-search.tsx`
+- `src/services/operations.ts`
+- `src/types/operations.ts`
+- `supabase/migrations/20261102080840_phase_3_operations.sql`
+- `tests/operations.test.ts`
+- `tests/operations-database.mjs`
+
 Phase 2 additions:
 
 - `docs/PHASE_2.md`

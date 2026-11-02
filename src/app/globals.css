@@ -1202,6 +1202,19 @@ em {
 .access-page h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
 .mfa-qr { width: 220px; height: 220px; max-width: 100%; background-size: contain; background-repeat: no-repeat; background-color: white; }
 .phase-two-add { max-width: 620px; margin-top: 30px; }
+.operation-wide { max-width: none; }
+.operation-fields { padding: 0; border: 0; margin: 0; min-width: 0; display: grid; gap: 22px; }
+.operation-fields label, .operation-search label { display: grid; gap: 8px; }
+.operation-form-grid, .operation-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.operation-fields .checkbox-label, .operation-search .checkbox-label { display: flex; align-items: flex-start; gap: 12px; }
+.checkbox-label input { width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px; accent-color: var(--primary); }
+.operation-search { display: flex; align-items: end; flex-wrap: wrap; gap: 18px; margin-bottom: 22px; }
+.operation-pagination { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; margin-top: 24px; }
+.operation-visit { padding: 24px 0; border-bottom: 1px solid var(--line); }
+.dashboard-content > .card, .operation-summary { margin-bottom: 24px; }
+.operation-summary dt { color: var(--muted); font-size: .875rem; }
+.operation-summary dd { margin: 0 0 16px; overflow-wrap: anywhere; }
+@media (max-width: 700px) { .operation-form-grid, .operation-summary { grid-template-columns: 1fr; } .operation-search label { width: 100%; } }
 .login-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

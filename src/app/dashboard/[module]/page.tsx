@@ -2,14 +2,10 @@ import { notFound } from "next/navigation";
 import { requireStaff } from "@/services/auth";
 import { EmptyState, PageHeader } from "@/components/ui";
 const modules: Record<string, { title: string; phase: string }> = {
-  camps: { title: "Camp management", phase: "Phase 3" },
-  patients: { title: "Patient management", phase: "Phase 3" },
   referrals: { title: "Referrals", phase: "Phase 4" },
   "follow-ups": { title: "Follow-ups", phase: "Phase 4" },
   reports: { title: "Reports", phase: "Phase 5" },
   gallery: { title: "Gallery management", phase: "Phase 5" },
-  users: { title: "User management", phase: "Phase 2" },
-  settings: { title: "Workspace settings", phase: "Phase 2" },
 };
 export default async function ModulePage({
   params,

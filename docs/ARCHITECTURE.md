@@ -1,5 +1,7 @@
 # Architecture decisions
 
+Phase 3 local operations are documented in `PHASE_3.md`. That document supersedes earlier statements about the demo overview and closed camp/patient/visit tables once its prepared migration is explicitly activated. Hosted database changes remain on hold.
+
 Phase 2 updates supersede the Phase 1 access strategy below: see `PHASE_2.md` for trust selection, MFA-enforced staff RPCs, recovery and the activation checklist. Clinical tables remain closed.
 
 ## Scope and boundaries

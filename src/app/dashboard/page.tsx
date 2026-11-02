@@ -1,77 +1,19 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { requireStaff } from "@/services/auth";
-import { Badge, Card, PageHeader, StatCard, Table } from "@/components/ui";
-import { demoStats, demoCamps } from "@/features/dashboard/demo";
+import { serverClient } from "@/lib/supabase/server";
+import { Card, PageHeader, StatCard, Table } from "@/components/ui";
 export default async function Dashboard() {
-  await requireStaff();
-  return (
-    <>
-      <PageHeader
-        eyebrow="YOUR TRUST AT A GLANCE"
-        title="A clearer view of your work."
-        description="A shared starting point for your team’s community eye-care activities."
-      />
-      <div className="notice">
-        <strong>Demonstration data.</strong> All figures and camps below are
-        fictional examples. No live patient data is connected.
-      </div>
-      <div className="stats-grid">
-        {demoStats.map((stat) => (
-          <StatCard key={stat.label} {...stat} />
-        ))}
-      </div>
-      <div className="dashboard-columns">
-        <Card>
-          <div className="card-heading">
-            <div>
-              <p className="eyebrow">OUTREACH</p>
-              <h2>Camp overview</h2>
-            </div>
-            <Badge>Demo</Badge>
-          </div>
-          <Table
-            caption="Illustrative camp schedule"
-            headings={["Camp", "Date", "Status"]}
-            rows={demoCamps.map((camp) => [
-              <span key={camp.name}>
-                <strong>{camp.name}</strong>
-                <span className="table-sub">{camp.location}</span>
-              </span>,
-              camp.date,
-              <Badge key={camp.status}>{camp.status}</Badge>,
-            ])}
-          />
-        </Card>
-        <Card className="next-step">
-          <p className="eyebrow">BUILT WITH CARE</p>
-          <h2>
-            A foundation
-            <br />
-            for what’s next.
-          </h2>
-          <p>
-            Manage staff permissions, choose your trust workspace, and protect
-            your account with two-step verification.
-          </p>
-          <Link href="/dashboard/settings" className="text-link">
-            Workspace settings →
-          </Link>
-          <hr />
-          <p className="muted">
-            Clinical workflows are not enabled in this phase.
-          </p>
-        </Card>
-      </div>
-      <Card className="privacy-callout">
-        <span aria-hidden>◎</span>
-        <div>
-          <h3>Privacy is part of every interaction.</h3>
-          <p>
-            Patient information stays in authorised workflows. Public impact
-            reporting will use reviewed, anonymous summaries.
-          </p>
-        </div>
-      </Card>
-    </>
-  );
+  const staff=await requireStaff();
+  if (!staff.permissions.includes("camps.read")) return <><PageHeader title="Welcome to your workspace." description="Your role's tools will appear as they become available." eyebrow={staff.trustName} /><Card><p>Account security and workspace selection are available in settings.</p><Link className="button" href="/dashboard/settings">Workspace settings</Link></Card></>;
+  if (staff.assuranceLevel!=="aal2") redirect("/auth/security");
+  const client=await serverClient();
+  const [camps,patients,visits,recent]=await Promise.all([
+    client.from("camps").select("id",{count:"exact",head:true}).eq("trust_id",staff.trustId),
+    client.from("patients").select("id",{count:"exact",head:true}).eq("trust_id",staff.trustId).is("archived_at",null),
+    client.from("visits").select("id",{count:"exact",head:true}).eq("trust_id",staff.trustId),
+    client.from("camps").select("id,camp_number,name,camp_date,status").eq("trust_id",staff.trustId).order("camp_date",{ascending:false}).limit(5),
+  ]);
+  if ([camps,patients,visits,recent].some(r=>r.error)) throw new Error("Unable to load workspace totals. Verify Phase 3 database setup.");
+  return <><PageHeader eyebrow={staff.trustName} title="A clearer view of your work." description="Private operational totals for this trust, drawn from its current records." /><div className="three-grid"><StatCard label="Camps" value={String(camps.count??0)} detail="All private camp records" /><StatCard label="Active patients" value={String(patients.count??0)} detail="Distinct registered people; archives excluded" /><StatCard label="Visits" value={String(visits.count??0)} detail="Includes intentional return visits" /></div><Card className="phase-two-add operation-wide"><h2>Recent camp schedule</h2>{recent.data?.length ? <Table caption="Recent private camps" headings={["Camp","Date","Status"]} rows={recent.data.map(c=>[<Link key={c.id} className="text-link" href={`/dashboard/camps/${c.id}`}>{c.camp_number} · {c.name}</Link>,c.camp_date,c.status])} /> : <p>No camps registered yet.</p>}<div className="hero-actions"><Link className="text-link" href="/dashboard/camps">Manage camps →</Link><Link className="text-link" href="/dashboard/patients">Find patients →</Link></div></Card><Card><h2>Privacy is part of care.</h2><p>Records in this workspace are private. Queue completion does not record an examination, diagnosis or treatment. Public impact and gallery publication need separate review.</p></Card></>;
 }

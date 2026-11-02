@@ -17,7 +17,7 @@ export default async function DashboardLayout({
         <p className="eyebrow sidebar-label">TRUST WORKSPACE</p>
         <Navigation dashboard />
         <div className="sidebar-bottom">
-          <span className="badge">Phase 2 · Staff access</span>
+          <span className="badge">Phase 3 · Camp operations</span>
           <Link href="/">View public website ↗</Link>
         </div>
       </aside>
