@@ -5,6 +5,9 @@ Paths are relative to the project root. Generated dependencies and build output 
 Phase 3 local additions:
 
 - `docs/DEPLOYMENT_STATUS.md`
+- `src/app/auth/callback/route.ts`
+- `src/lib/site-origin.ts`
+- `tests/site-origin.test.ts`
 - `supabase/migrations/20261102143558_foreign_key_indexes.sql`
 
 - `docs/PHASE_3.md`
@@ -101,3 +104,4 @@ Phase 2 additions:
 - `tests/validation.test.ts`
 - `tsconfig.json`
 - `docs/FILES.md`
+

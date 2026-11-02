@@ -2,7 +2,7 @@
 
 ## Release status
 
-Initially implemented locally at the user's request. The owner subsequently authorised activation on the personal account: database migrations have been applied. See `DEPLOYMENT_STATUS.md` for the current state. Client transfer, administrator provisioning, real patient-data entry and server hosting are not yet completed. `.env.local` is ignored and must not be included in a client handover.
+Initially implemented locally at the user's request. The owner subsequently authorised activation on the personal account: database migrations have been applied and the first administrator is provisioned. See `DEPLOYMENT_STATUS.md` for the current state. Client transfer, real patient-data entry, authenticator enrollment and server hosting are not yet completed. `.env.local` is ignored and must not be included in a client handover.
 
 The migration was generated using `supabase migration new phase_3_operations` and has now been applied to the connected project. The automated database checks use disposable in-memory PGlite databases with fictional fixtures and Auth stubs. They never connect to the hosted project.
 
@@ -68,3 +68,4 @@ Webpack is the tested fallback for the restricted Windows environment. The local
 5. Review role scopes, consent rules and operational monitoring with the trust. Verify duplicate handling, stale forms, consent withdrawal, archived patients and cross-trust denials in real independent sessions.
 
 Camp partners/assignments, clinical notes and examinations, diagnosis, referrals, follow-ups, imports, analytics exports and reviewed public publication remain separate future work.
+

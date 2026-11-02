@@ -9,7 +9,7 @@
 - No global super-administrator powers. Existing global profile names cannot be changed by another trust administrator.
 - `/dashboard/settings`: current trust, role, permissions, workspace switch and security links.
 - `/auth/security`: authenticator app enrollment and six-digit verification. An enrolled factor must be verified before dashboard entry. Staff-management RPCs independently require an AAL2 JWT.
-- `/auth/password`: generic recovery request responses, email-code recovery, password confirmation and global sign-out request after password change. Enrolled MFA also gates password updates.
+- `/auth/password`: generic recovery request responses, default email-link recovery through a PKCE callback, optional email-code recovery, password confirmation and global sign-out request after password change. Enrolled MFA also gates password updates.
 
 ## Permission matrix for this release
 
@@ -30,7 +30,7 @@ This conservative matrix implements only Phase 2. Camp/patient/clinical/report p
 2. Apply migrations in order, including `202611020001_staff_access.sql`, using `supabase db push` against the intended development project.
 3. Provision the first administrator using the trusted SQL procedure in README. A confirmed Auth user, profile, active membership and `trust_admin` role are required. Subsequent confirmed Auth accounts are created in the Supabase dashboard and attached using their UUID at `/dashboard/users`. No public registration or automatic account creation is enabled.
 4. Enable Supabase TOTP enrollment and verification. Sign in as the administrator, visit `/auth/security`, scan the QR code and verify it. New sessions with an enrolled factor must verify it again. Admin staff changes always require two steps even if MFA is not enrolled yet.
-5. Set the Auth Site URL to the approved **Next.js server deployment**. Configure the **Reset Password** email template to show `{{ .Token }}` as the recovery code and link to `{{ .SiteURL }}/auth/password`. The application verifies `type: recovery` codes; no email callback consumes links. Use trusted SMTP and configure provider rate limits, password policy and short OTP expiry in Supabase.
+5. Set the Auth Site URL and server-only `SITE_URL` to the approved **Next.js server deployment**. Allowlist `<SITE_URL>/auth/callback`. Default reset emails use a PKCE link; the callback exchanges its one-time code and redirects to the password form. Open the link in the browser that requested recovery. If custom SMTP/templates are available, the reset template can also show `{{ .Token }}` for the optional email-code flow. Configure provider rate limits, password policy and short OTP expiry in Supabase. Do not send recovery email to the static preview domain.
 6. Supabase secure password change/reauthentication may impose additional provider requirements. Test the configured policy before rollout; the UI displays a safe error if the provider rejects an update.
 7. If a user loses the authenticator, an authorised operator must verify their identity through the trust's agreed process before resetting factors using Supabase administration. No public MFA reset endpoint exists.
 
@@ -53,3 +53,4 @@ Before rollout manually verify: recovery email delivery, wrong/expired/reused co
 Live project verification and provider configuration require the trust's Supabase development project. Account invitations/email automation, automatic global user provisioning, clinical workflows, camp management and patient records are not enabled. Phase 3 remains a separate implementation.
 
 Primary references: [Supabase MFA](https://supabase.com/docs/guides/auth/auth-mfa/totp), [password recovery](https://supabase.com/docs/guides/auth/passwords).
+

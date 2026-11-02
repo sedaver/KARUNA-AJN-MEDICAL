@@ -19,7 +19,8 @@ export function RecoveryForm({ signedIn }: { signedIn: boolean }) {
     {step === "code" && <><label>Recovery code<Input name="token" autoComplete="one-time-code" inputMode="numeric" pattern="[0-9]{6,10}" required /></label><button type="button" className="text-link" onClick={() => { setStep("email"); setMessage(""); }}>Request another code</button></>}
     {step === "password" && <><label>New password<Input name="password" type="password" autoComplete="new-password" minLength={12} maxLength={128} required /></label><label>Confirm password<Input name="confirmPassword" type="password" autoComplete="new-password" required /></label><p className="muted">Use at least 12 characters. Your organisation may require a stronger password.</p></>}
     {message && <p role="status">{message}</p>}
-    <Button disabled={busy}>{busy ? "Please wait…" : step === "email" ? "Send recovery code" : step === "code" ? "Verify code" : "Save new password"}</Button>
+    <Button disabled={busy}>{busy ? "Please wait…" : step === "email" ? "Send recovery email" : step === "code" ? "Verify code" : "Save new password"}</Button>
     <Link className="text-link" href="/auth/security">Verify an authenticator →</Link>
   </form>;
 }
+

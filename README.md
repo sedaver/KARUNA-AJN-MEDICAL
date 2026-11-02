@@ -1,6 +1,8 @@
 # KARUNA AJN medical trust — Phase 3
 
-Phase 3 adds camps, patient registration/search, consent histories, repeat visits and archive/restore controls. The Supabase database migrations are now applied to the owner's Mumbai project. Read [current deployment status](docs/DEPLOYMENT_STATUS.md) and [Phase 3 workflows](docs/PHASE_3.md). Administrator account provisioning and full Next.js hosting are still pending. The existing live Site remains the static public preview.
+Phase 3 adds camps, patient registration/search, consent histories, repeat visits and archive/restore controls. The Supabase database migrations are now applied to the owner's Mumbai project and the first confirmed administrator is provisioned. Read [current deployment status](docs/DEPLOYMENT_STATUS.md) and [Phase 3 workflows](docs/PHASE_3.md). Full Next.js hosting and authenticated workflow verification are still pending. The existing live Site remains the static public preview.
+
+For recovery emails set the server-only `SITE_URL` to the application origin and allowlist `<SITE_URL>/auth/callback` in Supabase. Default email links use PKCE; optional custom templates can also include a recovery code. No service-role key is required by application code.
 
 Run `npm run test:operations` for the disposable local Phase 3 database checks. Local staff screens require a configured development database with the migrations and authorised staff/MFA setup; there is no public authentication bypass or patient demo endpoint.
 
@@ -146,5 +148,6 @@ The overview contains explicitly fictional totals and camp rows. All other staff
 - Known limitations: see `docs/SECURITY.md`. Phase 1 is a foundation, not a certified or launch-ready health-record system.
 
 Stop at Phase 1. Phase 2 requires a separate scope and review.
+
 
 

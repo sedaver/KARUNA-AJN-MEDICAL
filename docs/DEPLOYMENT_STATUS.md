@@ -22,10 +22,16 @@ The security advisor flags 11 RLS-enabled tables with no policies: these are del
 
 References: [closed-table advisory](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy), [SECURITY DEFINER advisory](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable).
 
+## Administrator and Auth configuration
+
+The first confirmed administrator account now has an active membership and the trust_admin role. The user entered the password directly in Supabase; it was not shared in chat or saved in source. Public signup is disabled, anonymous sign-in is disabled, email confirmation remains enabled, and TOTP enrollment is enabled. Individual authenticator enrollment and an authenticated application session still need verification after server hosting is connected.
+
+The application supports both default Supabase PKCE recovery links at `/auth/callback` and custom email-code recovery. Set server-only `SITE_URL` to the approved application origin and allowlist `SITE_URL/auth/callback` in Supabase's URL configuration. Open recovery links in the same browser that requested them. The callback has a fixed destination and does not accept an arbitrary next/redirect URL. Custom SMTP is still recommended for real staff delivery; no SMTP credentials were supplied.
+
 ## Still pending
 
-- Create the confirmed first Auth administrator and attach active trust membership plus the trust_admin role. No such Auth account existed at the time of verification.
-- Disable public signups/anonymous sign-in in hosted Auth settings, enable TOTP, configure password/recovery/SMTP settings and the approved host URL.
+- Configure recovery/SMTP settings and the approved host URL once server hosting is connected.
 - Deploy the full Next.js application to a server-capable host. The existing owner-private ChatGPT Site is a static public preview and does not execute the staff portal.
 - Verify real sign-in, recovery email delivery, MFA, staff workflows and cross-trust access using independent sessions.
 - Client account transfer and any later cleanup are separate future operations; nothing was deleted as part of activation.
+
