@@ -1,4 +1,8 @@
-# KARUNA AJN medical trust — Phase 1
+# KARUNA AJN medical trust — Phase 2
+
+Phase 2 adds trust selection, staff access management, authenticator verification and email-code password recovery. Read [Phase 2 activation and verification](docs/PHASE_2.md) first. Apply the new staff-access migration before using the dashboard. These workflows require a running Next.js server and a configured Supabase project; the existing static Sites deployment remains the public preview. Hosted Auth and migration verification are still pending project setup.
+
+The original Phase 1 handover below remains background documentation; its statements about missing permission/recovery features are superseded by `docs/PHASE_2.md`.
 
 A Next.js foundation for KARUNA AJN medical trust in India. Includes a public website, protected staff dashboard, Supabase authentication, and a private relational schema. **No clinical workflow is enabled.** No real patient information is included.
 
@@ -138,6 +142,5 @@ The overview contains explicitly fictional totals and camp rows. All other staff
 - Known limitations: see `docs/SECURITY.md`. Phase 1 is a foundation, not a certified or launch-ready health-record system.
 
 Stop at Phase 1. Phase 2 requires a separate scope and review.
-
 
 

@@ -50,8 +50,8 @@ export default async function Dashboard() {
             for what’s next.
           </h2>
           <p>
-            The workspace is ready for the next phase: staff permissions and
-            safe access to trust records.
+            Manage staff permissions, choose your trust workspace, and protect
+            your account with two-step verification.
           </p>
           <Link href="/dashboard/settings" className="text-link">
             Workspace settings →

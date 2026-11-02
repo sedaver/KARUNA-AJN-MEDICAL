@@ -1,4 +1,4 @@
-// Handwritten, read-only subset for Phase 1. Replace with Supabase-generated
+// Handwritten table/RPC subset for Phase 2. Replace with Supabase-generated
 // types after applying migrations; see README. This is NOT generated output.
 type ReadTable<Row> = {
   Row: Row;
@@ -24,7 +24,12 @@ export type Database = {
       }>;
     };
     Views: { [_ in never]: never };
-    Functions: { [_ in never]: never };
+    Functions: {
+      staff_contexts: { Args: Record<string, never>; Returns: { trust_id: string; trust_name: string; role_ids: string[] }[] };
+      staff_permissions: { Args: { p_trust_id: string }; Returns: { permission_id: string }[] };
+      list_trust_staff: { Args: { p_trust_id: string }; Returns: { user_id: string; display_name: string; active: boolean; role_ids: string[] }[] };
+      manage_trust_staff: { Args: { p_trust_id: string; p_user_id: string; p_display_name: string; p_role_id: string; p_active: boolean }; Returns: undefined };
+    };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
   };

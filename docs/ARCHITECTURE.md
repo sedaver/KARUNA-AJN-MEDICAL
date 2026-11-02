@@ -1,5 +1,7 @@
 # Architecture decisions
 
+Phase 2 updates supersede the Phase 1 access strategy below: see `PHASE_2.md` for trust selection, MFA-enforced staff RPCs, recovery and the activation checklist. Clinical tables remain closed.
+
 ## Scope and boundaries
 
 One Next.js application, two route families. Public content never queries clinical tables. Staff routes use server-verified Supabase identity and active membership. Next.js 16 proxy refreshes cookies and performs an initial claims check; server pages and the protected layout independently call the server-only `requireStaff` service. Its React cache is scoped to a render request, not shared between users. Server actions validate their own inputs and membership requirements.

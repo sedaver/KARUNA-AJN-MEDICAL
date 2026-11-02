@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -68,7 +69,7 @@ export function LoginForm({ configured }: { configured: boolean }) {
         <span aria-hidden>↗</span>
       </Button>
       <p className="muted">
-        Need access or a password reset? Contact your trust administrator.
+        <Link href="/auth/password">Forgot your password?</Link> For a new account, contact your trust administrator.
       </p>
     </form>
   );

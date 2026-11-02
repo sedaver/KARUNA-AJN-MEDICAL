@@ -26,12 +26,14 @@ try {
   await db.exec(`create role anon; create role authenticated; create schema auth; create schema storage;
     create table auth.users(id uuid primary key);
     create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+    create function auth.jwt() returns jsonb language sql stable as $$ select jsonb_build_object('aal',coalesce(nullif(current_setting('request.jwt.claim.aal', true),''),'aal1')) $$;
     grant usage on schema auth, public to anon, authenticated;
     grant execute on function auth.uid() to anon, authenticated;
     create table storage.buckets(id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);`);
   for (const migration of [
     "202610010001_foundation.sql",
     "202610010002_storage.sql",
+    "202611020001_staff_access.sql",
   ]) {
     await db.exec(
       await readFile(
@@ -218,6 +220,28 @@ try {
     (await db.query("select * from public.roles")).rows.length === 0,
     "inactive membership loses staff role catalogue access",
   );
+  await db.exec(`reset role; update public.trust_memberships set active=true where user_id='${u1}';
+    insert into public.user_roles(trust_id,user_id,role_id) values ('${t1}','${u1}','trust_admin');
+    set request.jwt.claim.sub='${u1}'; set request.jwt.claim.aal='aal1'; set role authenticated;`);
+  check((await db.query('select * from public.staff_contexts()')).rows.length === 1, 'workspace contexts contain only own active trusts');
+  await rejected(`select * from public.list_trust_staff('${t1}')`, '42501', 'administrator needs MFA');
+  await db.exec("reset role; set request.jwt.claim.aal='aal2'; set role authenticated");
+  check((await db.query(`select * from public.list_trust_staff('${t1}')`)).rows.length === 1, 'verified administrator can list own team');
+  await rejected(`select * from public.list_trust_staff('${t2}')`, '42501', 'cross-trust team read denied');
+  await rejected(`select public.manage_trust_staff('${t1}','${u1}','Staff A','analyst',true)`, '23514', 'last administrator demotion denied');
+  await rejected(`select public.manage_trust_staff('${t1}','${u1}','Staff A','trust_admin',false)`, '23514', 'last administrator deactivation denied');
+  await rejected(`select public.manage_trust_staff('${t1}','${u2}','Staff B','super_admin',true)`, '22023', 'global super administrator assignment denied');
+  await db.exec(`select public.manage_trust_staff('${t1}','${u2}','Staff B','trust_admin',true)`);
+  check((await db.query(`select * from public.list_trust_staff('${t1}')`)).rows.length === 2, 'admin can provision existing account into own trust');
+  await rejected(`update public.trust_memberships set active=false`, '42501', 'direct membership writes remain blocked');
+  await db.exec(`select public.manage_trust_staff('${t1}','${u2}','Staff B','analyst',false);
+    reset role; set request.jwt.claim.sub='${u2}'; set role authenticated;`);
+  await rejected(`select * from public.list_trust_staff('${t1}')`, '42501', 'revoked administrator immediately loses access');
+  await rejected(`select public.manage_trust_staff('${t1}','${u1}','Staff A','analyst',true)`, '42501', 'non administrator cannot mutate staff');
+  await db.exec('reset role; set role anon');
+  await rejected('select * from public.staff_contexts()', '42501', 'anonymous context RPC denied');
+  await db.exec('reset role');
+  check((await db.query("select * from public.audit_logs where table_name='user_roles'")).rows.length > 0, 'role changes create audit records');
   console.log(
     `\n${checks} database checks passed. Live Supabase integration still requires project credentials.`,
   );

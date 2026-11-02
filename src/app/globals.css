@@ -193,7 +193,7 @@ em {
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
-#main-content {
+.public-header-shell + #main-content {
   padding-top: 151px;
 }
 .top-strip {
@@ -1191,6 +1191,17 @@ em {
   font-size: 2rem;
   margin-bottom: 25px;
 }
+.access-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 48px 22px;
+  background: radial-gradient(circle at top right, #087f8c20, transparent 55%), var(--paper);
+}
+.access-page > .card { width: min(620px, 100%); }
+.access-page h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
+.mfa-qr { width: 220px; height: 220px; max-width: 100%; background-size: contain; background-repeat: no-repeat; background-color: white; }
+.phase-two-add { max-width: 620px; margin-top: 30px; }
 .login-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1199,6 +1210,7 @@ em {
   padding-top: 65px;
   padding-bottom: 100px;
 }
+.login-layout .hero-description { color: var(--muted); }
 .login-card {
   padding: 40px;
 }
@@ -1579,7 +1591,7 @@ dialog::backdrop {
   html {
     scroll-padding-top: 140px;
   }
-  #main-content {
+  .public-header-shell + #main-content {
     padding-top: 136px;
   }
   .public-header {

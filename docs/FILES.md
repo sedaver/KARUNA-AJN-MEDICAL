@@ -2,6 +2,24 @@
 
 Paths are relative to the project root. Generated dependencies and build output are excluded.
 
+Phase 2 additions:
+
+- `docs/PHASE_2.md`
+- `src/app/auth/password/page.tsx`
+- `src/app/auth/security/page.tsx`
+- `src/app/auth/trust/page.tsx`
+- `src/app/dashboard/settings/page.tsx`
+- `src/app/dashboard/users/page.tsx`
+- `src/features/auth/access-schemas.ts`
+- `src/features/auth/recovery-actions.ts`
+- `src/features/auth/recovery-form.tsx`
+- `src/features/auth/security-form.tsx`
+- `src/features/auth/staff-actions.ts`
+- `src/features/auth/staff-form.tsx`
+- `supabase/migrations/202611020001_staff_access.sql`
+- `tests/access.test.ts`
+- `tests/live-access.mjs`
+
 - `.env.example`
 - `.gitignore`
 - `.openai/hosting.json`
